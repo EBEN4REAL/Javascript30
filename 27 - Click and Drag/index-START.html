@@ -36,7 +36,37 @@
   </div>
 
 <script>
+   const container = document.querySelector(".items")
+   let mouseDown = false
+   let startX
+   let scrollLeft
+   
+   container.addEventListener("mousedown", (e) => {
+    mouseDown = true
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+   })
+
+   container.addEventListener("mouseleave", () => mouseDown = true)
+
+   container.addEventListener('mousemove', handleDrag)
+
+   function handleDrag(e) {
+    if(!mouseDown) return
+    this.classList.add('active');
+    e.preventDefault();
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 3;
+    container.scrollLeft = scrollLeft - walk;
+   }
+
+   container.addEventListener('mouseup', function(e) {
+    mouseDown = false
+    this.classList.remove('active');
+   })
+
 </script>
+ 
 
   </body>
 </html>

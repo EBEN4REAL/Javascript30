@@ -1,23 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
 
+<head>
+  <meta charset="UTF-8" />
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://fav.farm/🔥" />
+
+  <style>
+    .highlighted {
+      background-color: yellow;
+      font-weight: bold;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
   <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
+    <input type="text" class="search" placeholder="City or State" />
     <ul class="suggestions">
       <li>Filter for a city</li>
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    const endpoint =
+      "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-</script>
+    const search = document.querySelector(".search");
+    const parentWrapper = document.querySelector(".suggestions");
+
+    let fetchedLocations;
+
+    async function getLocations() {
+      try {
+        const fetchPromise = await fetch(endpoint);
+        const data = await fetchPromise.json();
+        return Promise.resolve(data);
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
+
+    getLocations().then((locations) => {
+      fetchedLocations = locations;
+    });
+
+    function debounce(func, delay) {
+      let timeoutId;
+
+      return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    }
+
+    function filteredLocations(locations, query) {
+      return locations.filter(
+        (location) =>
+          location.city.toLowerCase().includes(query.toLowerCase()) ||
+          location.state.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    function handleInput(event) {
+      const { value: query } = event.target;
+
+      const locations = filteredLocations(fetchedLocations, query);
+
+      const innerHTML = locations
+        .map((location) => {
+          const regex = new RegExp(query, "gi");
+          const cityElement = location.city.replace(
+            regex,
+            `<span class="hl">${query}</span>`
+          );
+
+          const stateElement = location.state.replace(
+            regex,
+            `<span class="hl">${query}</span>`
+          );
+          const html = `
+              <li>${cityElement}, ${stateElement} 
+                <small>${location.population}</small>
+              </li>
+            `;
+          return html;
+        })
+        .join("");
+
+      parentWrapper.innerHTML = innerHTML;
+    }
+
+    const handleSearch = debounce(handleInput, 300);
+
+    search.addEventListener("keyup", handleSearch);
+    search.addEventListener("change", handleSearch);
+  </script>
 </body>
+
 </html>

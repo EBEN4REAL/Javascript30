@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Videos</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <ul class="videos">
     <li data-time="5:43">
@@ -182,7 +184,42 @@
       Video 58
     </li>
   </ul>
-<script>
-</script>
+  <script>
+    const periods = [...document.querySelectorAll(".videos li")]
+    const totalTimeArr = []
+
+    function getTotalSeconds() {
+      periods.forEach(timeElement => {
+        const seconds = convertTimeToSeconds(timeElement.dataset.time)
+        totalTimeArr.push(seconds)
+      })
+      computeTotalTime()
+    }
+
+    function convertTimeToSeconds(time) {
+      const [mins, secs] = time.split(":").map(parseFloat)
+      const seconds = (mins * 60) + secs
+      return seconds
+    } 
+
+    function computeTotalTime() {
+      const totalSeconds = totalTimeArr.reduce((sum, value) => {
+        return sum += value
+      }, 0)
+      formatTime(totalSeconds)
+    }
+
+    function formatTime(totalSeconds) {
+      const hour = Math.floor(totalSeconds / 3600)
+      let secondsLeft =  totalSeconds % 3600
+      const minutes = Math.floor(secondsLeft / 60)
+      const secondsLeft_b =  minutes % 60
+      const seconds = secondsLeft_b
+      console.log("totalTime",`${hour}:${minutes}:${seconds}`)
+    }
+
+    getTotalSeconds()
+  </script>
 </body>
+
 </html>

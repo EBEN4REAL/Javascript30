@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -19,13 +21,22 @@
     <input id="base" type="color" name="base" value="#ffc600">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <div class="img-wrapper">
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  </div>
+
+
 
   <style>
-
     /*
       misc styles, nothing to do with CSS variables
     */
+
+    :root {
+      --base: #FFC600;
+      --spacing: 10px;
+      --blur: 0px;
+    }
 
     body {
       text-align: center;
@@ -43,10 +54,31 @@
     input {
       width: 100px;
     }
+
+    .hl {
+      color: var(--base)
+    }
+
+    .img-wrapper img {
+      background: var(--base);
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+    }
   </style>
 
   <script>
+    const inputs = [...document.querySelectorAll(".controls input")]
+
+    inputs.forEach(input => input.addEventListener('change', updateElements))
+    inputs.forEach(input => input.addEventListener('input', updateElements))
+
+    function updateElements(e) {
+      const sizing = this.dataset.sizing || ''
+
+      document.documentElement.style.setProperty(`--${this.name}`, `${this.value}${sizing}`)
+    }
   </script>
 
 </body>
+
 </html>

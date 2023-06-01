@@ -7,6 +7,26 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+      const name = "eben"
+      const nameArr = []
+
+      function handleKeyup(e) {
+        const key = e.key
+        if(nameArr.length === name.length) {
+          nameArr.shift()
+        }
+        nameArr.push(e.key)
+
+        if(nameArr.join("").includes(name)) {
+          cornify_add();
+        }
+        console.log(nameArr)
+      }
+
+      document.addEventListener('keyup', handleKeyup)
+      
+
+    </script>
   </body>
 </html>

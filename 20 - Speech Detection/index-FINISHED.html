@@ -14,6 +14,7 @@
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   const recognition = new SpeechRecognition();
+ 
   recognition.interimResults = true;
   recognition.lang = 'en-US';
 
@@ -26,6 +27,8 @@
       .map(result => result[0])
       .map(result => result.transcript)
       .join('');
+
+      console.log("transcript", transcript)
 
       const poopScript = transcript.replace(/poop|poo|shit|dump/gi, '💩');
       p.textContent = poopScript;

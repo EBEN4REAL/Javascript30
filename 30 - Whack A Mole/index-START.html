@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Whack A Mole!</title>
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
   <h1>Whack-a-mole! <span class="score">0</span></h1>
@@ -33,11 +35,63 @@
     </div>
   </div>
 
-<script>
-  const holes = document.querySelectorAll('.hole');
-  const scoreBoard = document.querySelector('.score');
-  const moles = document.querySelectorAll('.mole');
+  <script>
+    const holes = [...document.querySelectorAll('.hole')];
+    const scoreBoard = document.querySelector('.score');
+    const moles = document.querySelectorAll('.mole');
+    const scoreDisplay = document.querySelector('.score')
 
-</script>
+    let intervalId
+    let iteration = 5
+    let isMouseDown = false;
+    let score = 0
+
+    function startGame() {
+      score = 0
+      renderScore(0)
+      const delay = generateRandomNumber(0.2, 0.5)
+      toggleMoles(delay * 1000)
+    }
+
+    function toggleMoles(delay) {
+      intervalId = setInterval(() => {
+        let randomHoleIndex = Math.floor(generateRandomNumber(0, 5))
+        const randomHole = holes[randomHoleIndex]
+        const randomMole = moles[randomHoleIndex]
+        hideMoles()
+        randomHole.classList.add('up')
+
+        if (--iteration < 0) {
+          clearInterval(intervalId)
+          hideMoles()
+          iteration = 5
+          return
+        }
+      }, delay)
+    }
+
+    function generateRandomNumber(min, max) {
+      return Math.random() * (max - min + 1) + min
+    }
+
+    function hideMoles() {
+      holes.forEach(mole =>  mole.classList.remove('up'))
+    }
+
+    function handleMoleClick(e) {
+      if(!e.isTrusted) return;
+      if ([...this.classList].includes('mole')) {
+        score += 1
+        renderScore(score)
+      }
+    }
+
+    function renderScore(score) {
+      scoreDisplay.textContent = score
+    }
+
+    moles.forEach((mole, index) => mole.addEventListener('click', handleMoleClick))
+  </script>
 </body>
+
 </html>

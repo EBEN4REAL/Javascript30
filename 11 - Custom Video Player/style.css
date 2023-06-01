@@ -6,6 +6,11 @@ html {
   box-sizing: inherit;
 }
 
+:root {
+  --progress-filled-width: 2%;
+
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -18,6 +23,11 @@ body {
   justify-content: center;
 }
 
+.duration {
+  color: white;
+  font-size: 15px;
+  margin-left: 15px;
+}
 .player {
   max-width: 750px;
   border: 5px solid rgba(0,0,0,0.2);
@@ -38,11 +48,11 @@ body {
   width: 100%;
 }
 
-.player__video {
+.player_video {
   width: 100%;
 }
 
-.player__button {
+.player_button {
   background: none;
   border: 0;
   line-height: 1;
@@ -54,16 +64,16 @@ body {
   max-width: 50px;
 }
 
-.player__button:focus {
+.player_button:focus {
   border-color: #ffc600;
 }
 
-.player__slider {
+.player_slider {
   width: 10px;
   height: 30px;
 }
 
-.player__controls {
+.player_controls {
   display: flex;
   position: absolute;
   bottom: 0;
@@ -72,17 +82,18 @@ body {
   transition: all .3s;
   flex-wrap: wrap;
   background: rgba(0,0,0,0.1);
+  align-items: center;
 }
 
-.player:hover .player__controls {
-  transform: translateY(0);
+.player:hover .player_controls {
+  transform: translateY(0px);
 }
 
 .player:hover .progress {
   height: 15px;
 }
 
-.player__controls > * {
+.player_controls > * {
   flex: 1;
 }
 
@@ -97,11 +108,11 @@ body {
   cursor: ew-resize;
 }
 
-.progress__filled {
-  width: 50%;
+.progress_filled {
+  width: var(--progress-filled-width);
   background: #ffc600;
   flex: 0;
-  flex-basis: 50%;
+  flex-basis: var(--progress-filled-width);
 }
 
 /* unholy css to style input type="range" */
